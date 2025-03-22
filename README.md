@@ -1,5 +1,5 @@
 # SQL
-
+HackerRank_
 이 리포지토리는 SQL을 공부하면서 작성한 다양한 쿼리들과 예제들을 정리한 자료입니다. 데이터베이스 관련 기본 개념부터 고급 기법까지 다양한 SQL 기술을 익히고, 실습을 통해 이해도를 높였습니다. 해당 내용은 개인적인 학습을 위해 정리한 자료이며, 다른 사람들과 공유하고자 합니다.
 This repository contains various queries and examples I've written while studying SQL. From basic database concepts to advanced techniques, I have improved my understanding of SQL through hands-on practice. This collection is organized for personal learning, but I hope it can be helpful to others as well.
 
