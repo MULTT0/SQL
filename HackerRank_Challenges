@@ -1,0 +1,55 @@
+Julia asked her students to create some coding challenges. 
+Write a query to print the hacker_id, name, and the total number of challenges created by each student. 
+Sort your results by the total number of challenges in descending order. 
+If more than one student created the same number of challenges, then sort the result by hacker_id. 
+If more than one student created the same number of challenges and 
+the count is less than the maximum number of challenges created, 
+then exclude those students from the result.
+
+<Input Format>
+The following tables contain challenge data:
+Hackers: The hacker_id is the id of the hacker, and name is the name of the hacker. 
+Column | Type
+hacker_id | Integer
+name | String
+
+Challenges: The challenge_id is the id of the challenge, and hacker_id is the id of the student who created the challenge. 
+Column | Type
+challenge_id | Integer
+hacker_id | Integer
+
+#Anwser.
+```
+SELECT H0.hacker_id,
+       H0.name,
+       COUNT(*) AS challenges_created
+FROM Hackers H0
+JOIN Challenges C0 
+    ON H0.hacker_id = C0.hacker_id
+GROUP BY H0.hacker_id, H0.name
+HAVING COUNT(*) = (
+    SELECT MAX(X.challenges_created)
+    FROM (SELECT COUNT(*) AS challenges_created
+          FROM Challenges
+          GROUP BY hacker_id) X
+)
+--문제를 만든 개수 challenges_created 값이 2개 이상 중복되지 않고 unique한 값
+OR COUNT(*) IN 
+(
+    SELECT Z.challenges_created
+    FROM (
+        SELECT hacker_id, 
+                COUNT(*) AS challenges_created
+            FROM Challenges C
+            GROUP BY C.hacker_id
+            )Z
+        GROUP BY Z.challenges_created    
+        HAVING COUNT(*) = 1
+)
+ORDER BY challenges_created DESC, H0.hacker_id;
+```
+----
+이 쿼리의 목적은 각 학생이 만든 챌린지의 개수를 계산하여 출력하는 것입니다. 
+또한, 가장 많이 만든 챌린지를 만든 학생들만 결과에 포함하고
+, 같은 수의 챌린지를 만든 학생들은 hacker_id로 정렬하고,
+최대 챌린지 개수보다 적은 챌린지를 만든 학생들은 제외하려고 합니다.
