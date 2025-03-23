@@ -1,0 +1,39 @@
+You are given a table, Projects, containing three columns: Task_ID, Start_Date and End_Date. 
+It is guaranteed that the difference between the End_Date and the Start_Date is equal to 1 day for each row in the table.
+
+If the End_Date of the tasks are consecutive, then they are part of the same project. 
+Samantha is interested in finding the total number of different projects completed.
+
+Write a query to output the start and end dates of projects listed by the number of days it took to complete the project in ascending order. 
+If there is more than one project that have the same number of completion days, 
+then order by the start date of the project.
+
+---
+#Anwser
+```
+SELECT p1.start_date, p2.end_date
+FROM (
+    SELECT start_date
+    , row_number() OVER (ORDER BY start_date) AS rn
+    FROM projects
+    WHERE start_date NOT IN (
+        SELECT end_date FROM projects
+    )
+) AS p1
+JOIN (
+    SELECT end_date
+    , row_number() OVER (ORDER BY end_date) AS rn
+    FROM projects
+    WHERE end_date NOT IN (
+        SELECT start_date FROM projects
+    )
+) AS p2 
+ON p1.rn = p2.rn
+ORDER BY 
+DATEDIFF(DAY, p1.start_date, p2.end_date)
+, p1.start_date;
+```
+---
+테이블에서 각 프로젝트의 시작일과 종료일을 구하는 문제를 해결합니다. 
+프로젝트는 연속적인 날짜로 이어지는 작업들을 그룹화하여, 각각의 프로젝트가 언제 시작되었고 언제 끝났는지 계산합니다. 
+쿼리는 각 프로젝트의 시작일과 종료일, 그리고 해당 프로젝트가 걸린 일수를 계산하고, 이를 오름차순으로 정렬합니다
